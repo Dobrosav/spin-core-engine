@@ -13,7 +13,7 @@ class SpinCoreEngineApplicationTests {
 
     @Container
     @ServiceConnection
-    static MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:latest");
+    static MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0");
 
     @Test
     void contextLoads() {
