@@ -1,8 +1,10 @@
 package com.igt.spincoreengine.api.model.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BalanceResponse implements Serializable {
 
         private BigDecimal balance;
