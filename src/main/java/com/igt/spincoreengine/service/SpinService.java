@@ -33,7 +33,7 @@ public class SpinService {
     }
 
     public SpinResponse playSpin(Long playerId, Integer betAmount) {
-
+        logger.info("Executing spin for playerId: {} with betAmount: {}", playerId, betAmount);
         List<List<String>> matrix = generateMatrix();
 
         List<WinningLine> winningLines = new ArrayList<>();
@@ -47,6 +47,7 @@ public class SpinService {
             }
         }
 
+        logger.info("Spin generated for playerId: {}. Total win: {}", playerId, totalWin);
         BigDecimal newBalance = playerService.updateBalanceForSpin(playerId, BigDecimal.valueOf(betAmount), totalWin);
 
         return new SpinResponse(matrix, winningLines, totalWin, newBalance);
