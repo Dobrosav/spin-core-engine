@@ -1,8 +1,6 @@
 package com.igt.spincoreengine.api;
 
-import tools.jackson.databind.ObjectMapper;
 import com.igt.spincoreengine.api.model.request.DepositRequest;
-import com.igt.spincoreengine.api.model.request.SpinRequest;
 import com.igt.spincoreengine.api.model.response.BalanceResponse;
 import com.igt.spincoreengine.api.model.response.DepositResponse;
 import com.igt.spincoreengine.api.model.response.SpinResponse;
@@ -20,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -31,7 +30,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {PlayerController.class, GlobalApiErrorHandler.class})
 class PlayerControllerTest {

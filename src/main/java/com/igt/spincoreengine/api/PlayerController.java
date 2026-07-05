@@ -8,11 +8,6 @@ import com.igt.spincoreengine.api.model.response.ErrorResponse;
 import com.igt.spincoreengine.api.model.response.SpinResponse;
 import com.igt.spincoreengine.service.PlayerService;
 import com.igt.spincoreengine.service.SpinService;
-import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +15,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/players")
@@ -39,10 +39,10 @@ public class PlayerController {
 
     @Operation(summary = "Get player balance", description = "Retrieves the current balance of the specified player")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved balance", 
-                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = BalanceResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Player not found", 
-                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved balance",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = BalanceResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Player not found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/{id}/balance")
     public ResponseEntity<BalanceResponse> getBalance(
@@ -56,12 +56,12 @@ public class PlayerController {
 
     @Operation(summary = "Deposit funds", description = "Deposits the specified amount into the player's account")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully deposited funds", 
-                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = DepositResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid deposit amount", 
-                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Player not found", 
-                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "200", description = "Successfully deposited funds",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = DepositResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid deposit amount",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Player not found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/{id}/deposit")
     public ResponseEntity<DepositResponse> deposit(
@@ -76,12 +76,12 @@ public class PlayerController {
 
     @Operation(summary = "Play a spin", description = "Executes a spin game for the player with the specified bet amount")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully executed spin", 
-                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = SpinResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid bet amount or insufficient funds", 
-                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Player not found", 
-                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "200", description = "Successfully executed spin",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = SpinResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid bet amount or insufficient funds",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Player not found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/{id}/spin")
     public ResponseEntity<SpinResponse> playSpin(
