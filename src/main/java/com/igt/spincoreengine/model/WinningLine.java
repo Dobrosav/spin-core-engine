@@ -1,11 +1,17 @@
 package com.igt.spincoreengine.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 
+@Schema(description = "Represents a single winning payline")
 public class WinningLine {
 
+    @Schema(description = "Payline identifier (1=top row, 2=middle row, 3=bottom row, 4=V-shape, 5=inverted V-shape)", example = "1")
     private int lineId;
+    @Schema(description = "The symbol that formed the winning combination", example = "A")
     private String winningSymbol;
+    @Schema(description = "Payout multiplier for this winning line", example = "10.00")
     private BigDecimal payout;
 
     public WinningLine() {

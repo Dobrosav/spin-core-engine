@@ -1,12 +1,14 @@
 package com.igt.spincoreengine.api.model.response;
 
-import org.springframework.http.HttpStatusCode;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 
-//@JsonInclude(JsonInclude.Include.NON_NULL)
+@Schema(description = "Response returned when an error occurs")
 public class ErrorResponse implements Serializable {
+    @Schema(description = "HTTP status code", example = "404")
     private int statusCode;
+    @Schema(description = "Human-readable error message", example = "Player not found.")
     private String message;
 
     public ErrorResponse() {
