@@ -33,10 +33,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Controller-layer tests for {@link PlayerController} using MockMvc.
- * Tests HTTP status codes, request validation, and response structure.
- */
 @WebMvcTest(controllers = {PlayerController.class, GlobalApiErrorHandler.class})
 class PlayerControllerTest {
 
@@ -51,10 +47,6 @@ class PlayerControllerTest {
 
     @MockitoBean
     private SpinService spinService;
-
-    // =========================================================================
-    // GET BALANCE
-    // =========================================================================
 
     @Nested
     @DisplayName("GET /api/v1/players/{id}/balance")
@@ -81,10 +73,6 @@ class PlayerControllerTest {
                     .andExpect(status().isNotFound());
         }
     }
-
-    // =========================================================================
-    // DEPOSIT
-    // =========================================================================
 
     @Nested
     @DisplayName("POST /api/v1/players/{id}/deposit")
@@ -145,10 +133,6 @@ class PlayerControllerTest {
                     .andExpect(status().isNotFound());
         }
     }
-
-    // =========================================================================
-    // SPIN
-    // =========================================================================
 
     @Nested
     @DisplayName("POST /api/v1/players/{id}/spin")

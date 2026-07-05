@@ -20,10 +20,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-/**
- * Unit tests for {@link PlayerService}.
- * Tests balance retrieval, deposit logic, and spin balance update including edge cases.
- */
 @ExtendWith(MockitoExtension.class)
 class PlayerServiceTest {
 
@@ -41,10 +37,6 @@ class PlayerServiceTest {
         testPlayer.setId(1L);
         testPlayer.setBalance(new BigDecimal("100.00"));
     }
-
-    // =========================================================================
-    // GET BALANCE
-    // =========================================================================
 
     @Nested
     @DisplayName("Get Balance")
@@ -81,10 +73,6 @@ class PlayerServiceTest {
             assertEquals(0, BigDecimal.ZERO.compareTo(response.getBalance()));
         }
     }
-
-    // =========================================================================
-    // DEPOSIT
-    // =========================================================================
 
     @Nested
     @DisplayName("Deposit")
@@ -135,10 +123,6 @@ class PlayerServiceTest {
         }
     }
 
-    // =========================================================================
-    // UPDATE BALANCE FOR SPIN
-    // =========================================================================
-
     @Nested
     @DisplayName("Update Balance For Spin")
     class UpdateBalanceForSpinTests {
@@ -152,7 +136,6 @@ class PlayerServiceTest {
             BigDecimal newBalance = playerService.updateBalanceForSpin(
                     1L, new BigDecimal("5"), new BigDecimal("10"));
 
-            // 100 - 5 + 10 = 105
             assertEquals(0, new BigDecimal("105.00").compareTo(newBalance));
             verify(playerRepository).save(testPlayer);
         }
@@ -166,7 +149,6 @@ class PlayerServiceTest {
             BigDecimal newBalance = playerService.updateBalanceForSpin(
                     1L, new BigDecimal("5"), BigDecimal.ZERO);
 
-            // 100 - 5 + 0 = 95
             assertEquals(0, new BigDecimal("95.00").compareTo(newBalance));
         }
 
@@ -193,7 +175,6 @@ class PlayerServiceTest {
             BigDecimal newBalance = playerService.updateBalanceForSpin(
                     1L, new BigDecimal("5"), BigDecimal.ZERO);
 
-            // 5 - 5 + 0 = 0
             assertEquals(0, BigDecimal.ZERO.compareTo(newBalance));
         }
 
@@ -213,11 +194,9 @@ class PlayerServiceTest {
             when(playerRepository.findById(1L)).thenReturn(Optional.of(testPlayer));
             when(playerRepository.save(testPlayer)).thenReturn(testPlayer);
 
-            // All paylines win: total win could be large
             BigDecimal newBalance = playerService.updateBalanceForSpin(
                     1L, new BigDecimal("5"), new BigDecimal("17"));
 
-            // 100 - 5 + 17 = 112
             assertEquals(0, new BigDecimal("112.00").compareTo(newBalance));
         }
     }

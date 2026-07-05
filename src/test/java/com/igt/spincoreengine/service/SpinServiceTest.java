@@ -17,16 +17,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-/**
- * Unit tests for {@link SpinService}.
- * <p>
- * Includes all mandatory test scenarios from task.md:
- * - Scenario A: Pure Win (3-of-a-kind K on Line 1)
- * - Scenario B: Wild Substitution (4-of-a-kind A with Wild on Line 3)
- * - Scenario C: Mixed Wilds (all W on Line 4, treated as A 5-of-a-kind)
- * <p>
- * Matrix is mocked via Mockito spy on generateMatrix() to inject deterministic outcomes.
- */
 @ExtendWith(MockitoExtension.class)
 class SpinServiceTest {
 
@@ -40,10 +30,6 @@ class SpinServiceTest {
         spinService = spy(new SpinService(playerService));
     }
 
-    /**
-     * Helper: builds a 3x5 matrix (List of 3 rows, each row has 5 columns).
-     * Matrix layout: matrix.get(row).get(col)
-     */
     private List<List<String>> buildMatrix(String[][] grid) {
         return Arrays.asList(
                 Arrays.asList(grid[0]),
@@ -52,29 +38,17 @@ class SpinServiceTest {
         );
     }
 
-    // =========================================================================
-    // MANDATORY TEST SCENARIOS FROM task.md
-    // =========================================================================
-
     @Nested
     @DisplayName("Mandatory Scenarios from task.md")
     class MandatoryScenarios {
 
-        /**
-         * Scenario A (Pure Win): Matrix Line 1 contains [K, K, K, Q, A].
-         * Result: Line 1 wins 3-of-a-kind for symbol K, payout is 1.
-         * <p>
-         * Line 1 = Top Horizontal Row: [0,0], [0,1], [0,2], [0,3], [0,4]
-         */
         @Test
         @DisplayName("Scenario A - Pure Win: Line 1 = [K,K,K,Q,A] → 3-of-a-kind K, payout = 1")
         void scenarioA_pureWin_threeOfAKindK() {
-            // Arrange: Row 0 = [K, K, K, Q, A] (Line 1 path)
-            // Other rows can be anything that doesn't win
             String[][] grid = {
-                    {"K", "K", "K", "Q", "A"},   // Row 0 (Line 1)
-                    {"Q", "A", "Q", "K", "Q"},   // Row 1
-                    {"A", "Q", "A", "A", "K"}    // Row 2
+                    {"K", "K", "K", "Q", "A"},
+                    {"Q", "A", "Q", "K", "Q"},
+                    {"A", "Q", "A", "A", "K"}
             };
             List<List<String>> matrix = buildMatrix(grid);
 
@@ -86,14 +60,11 @@ class SpinServiceTest {
                         return new BigDecimal("100").subtract(bet).add(win);
                     });
 
-            // Act
             SpinResponse response = spinService.playSpin(1L, 5);
 
-            // Assert
             assertNotNull(response);
             assertFalse(response.getWinningLines().isEmpty(), "Should have at least one winning line");
 
-            // Find Line 1 win
             WinningLine line1Win = response.getWinningLines().stream()
                     .filter(w -> w.getLineId() == 1)
                     .findFirst()
@@ -105,20 +76,13 @@ class SpinServiceTest {
                     "3-of-a-kind K payout should be 1");
         }
 
-        /**
-         * Scenario B (Wild Substitution): Matrix Line 3 contains [A, W, A, A, Q].
-         * Result: Line 3 wins 4-of-a-kind for symbol A (Wild substitutes for A). Payout is 5.
-         * <p>
-         * Line 3 = Bottom Horizontal Row: [2,0], [2,1], [2,2], [2,3], [2,4]
-         */
         @Test
         @DisplayName("Scenario B - Wild Substitution: Line 3 = [A,W,A,A,Q] → 4-of-a-kind A, payout = 5")
         void scenarioB_wildSubstitution_fourOfAKindA() {
-            // Arrange: Row 2 = [A, W, A, A, Q] (Line 3 path)
             String[][] grid = {
-                    {"Q", "K", "Q", "K", "Q"},   // Row 0
-                    {"K", "Q", "K", "Q", "K"},   // Row 1
-                    {"A", "W", "A", "A", "Q"}    // Row 2 (Line 3)
+                    {"Q", "K", "Q", "K", "Q"},
+                    {"K", "Q", "K", "Q", "K"},
+                    {"A", "W", "A", "A", "Q"}
             };
             List<List<String>> matrix = buildMatrix(grid);
 
@@ -130,10 +94,8 @@ class SpinServiceTest {
                         return new BigDecimal("100").subtract(bet).add(win);
                     });
 
-            // Act
             SpinResponse response = spinService.playSpin(1L, 5);
 
-            // Assert
             WinningLine line3Win = response.getWinningLines().stream()
                     .filter(w -> w.getLineId() == 3)
                     .findFirst()
@@ -146,22 +108,13 @@ class SpinServiceTest {
                     "4-of-a-kind A payout should be 5");
         }
 
-        /**
-         * Scenario C (Mixed Wilds): Matrix Line 4 (V-Shape) contains [W, W, W, W, W].
-         * Result: Line 4 wins. Pure Wild line matches highest paying symbol (A), payout is 10.
-         * <p>
-         * Line 4 = V-Shape: [0,0], [1,1], [2,2], [1,3], [0,4]
-         */
         @Test
         @DisplayName("Scenario C - Mixed Wilds: Line 4 (V-Shape) = [W,W,W,W,W] → A 5-of-a-kind, payout = 10")
         void scenarioC_allWilds_treatedAsA_fiveOfAKind() {
-            // Arrange: V-Shape path = [0,0], [1,1], [2,2], [1,3], [0,4]
-            // We need: matrix[0][0]=W, matrix[1][1]=W, matrix[2][2]=W, matrix[1][3]=W, matrix[0][4]=W
-            // Fill other positions to not create additional wins
             String[][] grid = {
-                    {"W", "Q", "K", "Q", "W"},   // Row 0: [0,0]=W, [0,4]=W
-                    {"K", "W", "Q", "W", "K"},   // Row 1: [1,1]=W, [1,3]=W
-                    {"Q", "K", "W", "K", "Q"}    // Row 2: [2,2]=W
+                    {"W", "Q", "K", "Q", "W"},
+                    {"K", "W", "Q", "W", "K"},
+                    {"Q", "K", "W", "K", "Q"}
             };
             List<List<String>> matrix = buildMatrix(grid);
 
@@ -173,10 +126,8 @@ class SpinServiceTest {
                         return new BigDecimal("100").subtract(bet).add(win);
                     });
 
-            // Act
             SpinResponse response = spinService.playSpin(1L, 5);
 
-            // Assert
             WinningLine line4Win = response.getWinningLines().stream()
                     .filter(w -> w.getLineId() == 4)
                     .findFirst()
@@ -189,10 +140,6 @@ class SpinServiceTest {
                     "5-of-a-kind A payout should be 10");
         }
     }
-
-    // =========================================================================
-    // ADDITIONAL EDGE CASE TESTS
-    // =========================================================================
 
     @Nested
     @DisplayName("Payout Calculation Tests")
@@ -382,18 +329,6 @@ class SpinServiceTest {
         @Test
         @DisplayName("No matching symbols on any payline → no wins")
         void noWins_differentSymbolsOnEveryLine() {
-            // Grid carefully designed so NO payline has 3+ consecutive matching symbols:
-            // Line 1 (row0): A,K,Q,A,K → A,K breaks
-            // Line 2 (row1): K,Q,A,K,Q → K,Q breaks
-            // Line 3 (row2): Q,A,K,Q,A → Q,A breaks
-            // Line 4 (V:0,0|1,1|2,2|1,3|0,4): A,Q,K,K,K → A,Q breaks
-            // Line 5 (IV:2,0|1,1|0,2|1,3|2,4): Q,Q,Q... wait, need to check
-            // Let's use a grid verified for all paylines:
-            // Row0: A,K,A,K,Q   Line1: A,K breaks
-            // Row1: K,Q,K,A,K   Line2: K,Q breaks
-            // Row2: Q,A,Q,K,A   Line3: Q,A breaks
-            // Line4 V[0,0][1,1][2,2][1,3][0,4]: A,Q,Q,A,Q → A,Q breaks
-            // Line5 IV[2,0][1,1][0,2][1,3][2,4]: Q,Q,A,A,A → Q,Q,A breaks
             String[][] grid = {
                     {"A", "K", "A", "K", "Q"},
                     {"K", "Q", "K", "A", "K"},
@@ -432,7 +367,6 @@ class SpinServiceTest {
         @Test
         @DisplayName("Matching symbols not starting from reel 1 → no win")
         void matchingSymbols_notFromReel1_noWin() {
-            // Line 1: [A, K, K, K, K] — 4 K's but starting from position 2, not from reel 1
             String[][] grid = {
                     {"A", "K", "K", "K", "K"},
                     {"Q", "A", "Q", "A", "Q"},
@@ -445,7 +379,6 @@ class SpinServiceTest {
 
             SpinResponse response = spinService.playSpin(1L, 5);
 
-            // Line 1 should NOT win because matching starts from reel 2, not reel 1
             WinningLine line1 = response.getWinningLines().stream()
                     .filter(w -> w.getLineId() == 1).findFirst().orElse(null);
             assertNull(line1, "Matching symbols not starting from reel 1 should not win");
@@ -525,8 +458,6 @@ class SpinServiceTest {
         @Test
         @DisplayName("Wild does NOT substitute across different symbols: [A, W, K, Q, A] → only 2 matches (A+W), no win")
         void wildDoesNotBridgeDifferentSymbols() {
-            // First non-wild is A, second is W (matches A), third is K (breaks chain)
-            // So consecutive match from reel 1 = A, W → only 2 matches, no win
             String[][] grid = {
                     {"A", "W", "K", "Q", "A"},
                     {"Q", "K", "Q", "A", "Q"},
@@ -552,9 +483,6 @@ class SpinServiceTest {
         @Test
         @DisplayName("Multiple lines winning simultaneously → total payout accumulated")
         void multiplePaylineWins_accumulatedTotalWin() {
-            // Line 1 (row 0): [A, A, A, A, A] → 5-of-a-kind A = 10
-            // Line 2 (row 1): [K, K, K, K, K] → 5-of-a-kind K = 5
-            // Line 3 (row 2): [Q, Q, Q, Q, Q] → 5-of-a-kind Q = 2
             String[][] grid = {
                     {"A", "A", "A", "A", "A"},
                     {"K", "K", "K", "K", "K"},
@@ -567,14 +495,10 @@ class SpinServiceTest {
 
             SpinResponse response = spinService.playSpin(1L, 5);
 
-            // Lines 1, 2, 3 should all win
-            // Line 4 (V-shape): [A, K, Q, K, A] → A,K breaks at K (no win)
-            // Line 5 (Inv V):   [Q, K, A, K, Q] → Q,K breaks at K (no win)
             assertEquals(3, response.getWinningLines().stream()
                             .filter(w -> w.getLineId() <= 3).count(),
                     "Lines 1, 2, and 3 should all win");
 
-            // Total = 10 + 5 + 2 = 17
             assertEquals(0, new BigDecimal("17").compareTo(response.getTotalWin()),
                     "Total win should be 10 + 5 + 2 = 17");
         }
@@ -582,7 +506,6 @@ class SpinServiceTest {
         @Test
         @DisplayName("Only highest win per payline (5-of-a-kind, not 3-of-a-kind)")
         void highestWinPerPayline_fiveNotThree() {
-            // Line 1: [K, K, K, K, K] → should pay 5-of-a-kind (5), NOT 3-of-a-kind (1)
             String[][] grid = {
                     {"K", "K", "K", "K", "K"},
                     {"A", "Q", "A", "Q", "A"},
@@ -611,11 +534,10 @@ class SpinServiceTest {
         @Test
         @DisplayName("Line 4 V-Shape win: [0,0],[1,1],[2,2],[1,3],[0,4] all K → 5-of-a-kind K, payout = 5")
         void vShapeWin_fiveOfAKindK() {
-            // V-Shape: [0,0], [1,1], [2,2], [1,3], [0,4]
             String[][] grid = {
-                    {"K", "Q", "A", "Q", "K"},  // [0,0]=K, [0,4]=K
-                    {"Q", "K", "A", "K", "Q"},  // [1,1]=K, [1,3]=K
-                    {"A", "Q", "K", "Q", "A"}   // [2,2]=K
+                    {"K", "Q", "A", "Q", "K"},
+                    {"Q", "K", "A", "K", "Q"},
+                    {"A", "Q", "K", "Q", "A"}
             };
             List<List<String>> matrix = buildMatrix(grid);
             doReturn(matrix).when(spinService).generateMatrix();
@@ -634,11 +556,10 @@ class SpinServiceTest {
         @Test
         @DisplayName("Line 5 Inverted V-Shape win: [2,0],[1,1],[0,2],[1,3],[2,4] all Q → 5-of-a-kind Q, payout = 2")
         void invertedVShapeWin_fiveOfAKindQ() {
-            // Inv V-Shape: [2,0], [1,1], [0,2], [1,3], [2,4]
             String[][] grid = {
-                    {"K", "A", "Q", "A", "K"},  // [0,2]=Q
-                    {"A", "Q", "K", "Q", "A"},  // [1,1]=Q, [1,3]=Q
-                    {"Q", "A", "K", "A", "Q"}   // [2,0]=Q, [2,4]=Q
+                    {"K", "A", "Q", "A", "K"},
+                    {"A", "Q", "K", "Q", "A"},
+                    {"Q", "A", "K", "A", "Q"}
             };
             List<List<String>> matrix = buildMatrix(grid);
             doReturn(matrix).when(spinService).generateMatrix();
@@ -683,8 +604,6 @@ class SpinServiceTest {
         @Test
         @DisplayName("Response contains valid newBalance from PlayerService")
         void responseContainsNewBalance() {
-            // Grid designed so no payline wins → totalWin = 0
-            // All 5 paylines verified to break before 3 consecutive matches
             String[][] grid = {
                     {"A", "K", "A", "K", "Q"},
                     {"K", "Q", "K", "A", "K"},
@@ -703,7 +622,6 @@ class SpinServiceTest {
         @Test
         @DisplayName("PlayerService.updateBalanceForSpin is called with correct bet and total win")
         void playerServiceCalledWithCorrectArgs() {
-            // A full win matrix: Line 1 = [A, A, A, A, A] → totalWin = 10
             String[][] grid = {
                     {"A", "A", "A", "A", "A"},
                     {"Q", "K", "Q", "K", "Q"},
@@ -731,10 +649,7 @@ class SpinServiceTest {
         @Test
         @DisplayName("Generated matrix has correct dimensions (3 rows x 5 columns)")
         void generatedMatrix_correctDimensions() {
-            // Call the real generateMatrix (not mocked) via a fresh SpinService
             SpinService realService = new SpinService(playerService);
-            // Access via reflection or just test through playSpin
-            // Instead, we test the real generateMatrix by calling it via a spy that doesn't override it
             SpinService realSpy = spy(realService);
             when(playerService.updateBalanceForSpin(anyLong(), any(), any()))
                     .thenReturn(new BigDecimal("95"));
