@@ -6,19 +6,22 @@ import java.io.Serializable;
 
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse implements Serializable {
-    private HttpStatusCode statusCode;
+    private int statusCode;
     private String message;
 
-    public ErrorResponse(HttpStatusCode statusCode, String message) {
+    public ErrorResponse() {
+    }
+
+    public ErrorResponse(int statusCode, String message) {
         this.statusCode = statusCode;
         this.message = message;
     }
 
-    public HttpStatusCode getStatusCode() {
+    public int getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(HttpStatusCode statusCode) {
+    public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
 
