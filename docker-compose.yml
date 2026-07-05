@@ -1,17 +1,38 @@
+version: '3.8'
+
 services:
+  app:
+    build: .
+    ports:
+      - "11150:11150"
+    environment:
+      - DB_HOST=db
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      db:
+        condition: service_healthy
+
   db:
     image: mysql:latest
-    container_name: slot_engine_db
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: slot_game
-      MYSQL_USER: slot_user
-      MYSQL_PASSWORD: slot_password
     ports:
       - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=slot_game
+      - MYSQL_USER=slot_user
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    env_file:
+      - .env
     volumes:
       - mysql_data:/var/lib/mysql
-    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mysql_data:
