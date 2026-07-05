@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <property name="LOG_DIR" value="./logs" />
+    <property name="LOG_DIR" value="./logs"/>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/spin-core-engine.log</file>
@@ -12,16 +12,16 @@
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_DIR}/archive/spin-core-engine-%d{yyyy-MM-dd}.log</fileNamePattern>
-            
-    
+
+
             <maxHistory>30</maxHistory>
         </rollingPolicy>
     </appender>
 
-    <logger name="com.igt.spincoreengine" level="INFO" />
+    <logger name="com.igt.spincoreengine" level="INFO"/>
 
     <root level="INFO">
-        <appender-ref ref="FILE" />
+        <appender-ref ref="FILE"/>
     </root>
 
 </configuration>
