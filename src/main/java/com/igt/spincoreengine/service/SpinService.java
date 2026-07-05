@@ -52,7 +52,7 @@ public class SpinService {
         return new SpinResponse(matrix, winningLines, totalWin, newBalance);
     }
 
-    private List<List<String>> generateMatrix() {
+    protected List<List<String>> generateMatrix() {
         List<List<String>> matrix = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             matrix.add(new ArrayList<>());
