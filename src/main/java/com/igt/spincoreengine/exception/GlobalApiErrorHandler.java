@@ -1,5 +1,8 @@
 package com.igt.spincoreengine.exception;
 
+import com.igt.spincoreengine.api.model.response.ErrorResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -10,13 +13,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import com.igt.spincoreengine.api.model.response.ErrorResponse;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 
 import java.util.stream.Collectors;
 
@@ -31,7 +29,7 @@ public class GlobalApiErrorHandler {
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleServiceException(ServiceException ex) {
         logger.error("ServiceException occurred: {}", ex.getShortMessage());
-        return new ResponseEntity<>(new ErrorResponse(ex.getHttpStatus() ,ex.getShortMessage()), ex.getHttpStatus());
+        return new ResponseEntity<>(new ErrorResponse(ex.getHttpStatus(), ex.getShortMessage()), ex.getHttpStatus());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -58,14 +56,14 @@ public class GlobalApiErrorHandler {
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException ex) {
         logger.error("NoHandlerFoundException occurred: {}", ex.getMessage(), ex);
-        return new ResponseEntity<>(new ErrorResponse(HttpStatus.NOT_FOUND , "Resource not found"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.NOT_FOUND, "Resource not found"), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
         logger.error("Exception occurred: {}", ex.getMessage(), ex);
-        return new ResponseEntity<>(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR , "General error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "General error"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

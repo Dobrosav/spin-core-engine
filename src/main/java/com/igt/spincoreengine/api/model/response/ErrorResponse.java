@@ -1,12 +1,11 @@
 package com.igt.spincoreengine.api.model.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.http.HttpStatusCode;
 
 import java.io.Serializable;
 
 //@JsonInclude(JsonInclude.Include.NON_NULL)
-public class ErrorResponse  implements Serializable {
+public class ErrorResponse implements Serializable {
     private HttpStatusCode statusCode;
     private String message;
 

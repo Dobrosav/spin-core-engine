@@ -8,7 +8,6 @@ import com.igt.spincoreengine.exception.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 
@@ -57,6 +56,8 @@ public class PlayerService {
 
     private Player getPlayerOrThrow(Long playerId) {
         return playerRepository.findById(playerId)
-                .orElseThrow(() -> {throw new ServiceException("PLayer not found.", HttpStatus.NOT_FOUND);});
+                .orElseThrow(() -> {
+                    throw new ServiceException("PLayer not found.", HttpStatus.NOT_FOUND);
+                });
     }
 }
