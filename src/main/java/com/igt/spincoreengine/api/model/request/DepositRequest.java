@@ -1,9 +1,9 @@
 package com.igt.spincoreengine.api.model.request;
 
+import com.igt.spincoreengine.utils.ErrorMessages;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 public class DepositRequest implements Serializable {
 
     @Schema(description = "Amount to deposit. Must be greater than 0.", example = "50.00", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "Amount cannot be null")
-    @DecimalMin(value = "0.01", message = "Amount must be greater than 0.")
+    @NotNull(message = ErrorMessages.AMOUNT_NOT_NULL)
+    @DecimalMin(value = "0.01", message = ErrorMessages.AMOUNT_MIN)
     private BigDecimal amount;
 
     public DepositRequest() {
