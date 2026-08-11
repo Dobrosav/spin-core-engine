@@ -1,0 +1,9 @@
+CREATE DATABASE IF NOT EXISTS slot_game;
+USE slot_game;
+
+CREATE TABLE IF NOT EXISTS players (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    balance DECIMAL(10,2) NOT NULL
+);
+
+INSERT IGNORE INTO players (id, balance) VALUES (1, 1000.00);
