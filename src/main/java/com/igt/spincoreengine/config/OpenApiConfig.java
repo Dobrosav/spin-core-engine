@@ -25,6 +25,10 @@ import org.springframework.context.annotation.Configuration;
         ),
         servers = {
                 @Server(
+                        description = "EC2 Remote Server",
+                        url = "http://ec2-51-20-3-101.eu-north-1.compute.amazonaws.com:11150"
+                ),
+                @Server(
                         description = "Local Environment",
                         url = "http://localhost:11150"
                 )
