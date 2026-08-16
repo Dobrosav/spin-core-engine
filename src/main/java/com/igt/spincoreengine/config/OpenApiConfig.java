@@ -34,5 +34,8 @@ import org.springframework.context.annotation.Configuration;
                 )
         }
 )
+/**
+ * Configuration class for OpenAPI documentation.
+ */
 public class OpenApiConfig {
 }
