@@ -80,6 +80,11 @@ access the Swagger UI to view and interact with the endpoints.
 * **Swagger UI URL**: [http://localhost:11150/swagger-ui/index.html](http://localhost:11150/swagger-ui/index.html)
 * **OpenAPI JSON**: [http://localhost:11150/v3/api-docs](http://localhost:11150/v3/api-docs)
 
+### Production (EC2)
+
+* **Swagger UI URL**: [http://ec2-51-20-3-101.eu-north-1.compute.amazonaws.com:11150/swagger-ui/index.html](http://ec2-51-20-3-101.eu-north-1.compute.amazonaws.com:11150/swagger-ui/index.html)
+* **OpenAPI JSON**: [http://ec2-51-20-3-101.eu-north-1.compute.amazonaws.com:11150/v3/api-docs](http://ec2-51-20-3-101.eu-north-1.compute.amazonaws.com:11150/v3/api-docs)
+
 ## Running Tests
 
 The project uses JUnit 5 and Testcontainers to spin up a real MySQL database during the test phase for integration
