@@ -18,6 +18,7 @@ services:
     ports:
       - "3306:3306"
     environment:
+      - MY_SQL_ROOT_HOST=%
       - MYSQL_ROOT_PASSWORD=root_password
       - MYSQL_DATABASE=slot_game
       - MYSQL_USER=slot_user
