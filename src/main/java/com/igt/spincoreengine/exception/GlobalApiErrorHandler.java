@@ -1,10 +1,7 @@
 package com.igt.spincoreengine.exception;
 
-import com.igt.spincoreengine.api.model.response.ErrorResponse;
-import com.igt.spincoreengine.utils.ErrorMessages;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -17,6 +14,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import com.igt.spincoreengine.api.model.response.ErrorResponse;
+import com.igt.spincoreengine.utils.ErrorMessages;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -55,6 +59,13 @@ public class GlobalApiErrorHandler {
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException ex) {
         logger.error("NoHandlerFoundException occurred: {}", ex.getMessage(), ex);
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.NOT_FOUND.value(), ErrorMessages.RESOURCE_NOT_FOUND), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException ex) {
+        logger.error("NoResourceFoundException occurred: {}", ex.getMessage(), ex);
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.NOT_FOUND.value(), ErrorMessages.RESOURCE_NOT_FOUND), HttpStatus.NOT_FOUND);
     }
 
